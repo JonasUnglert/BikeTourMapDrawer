@@ -1,0 +1,29 @@
+{
+    "token_type": "Bearer",
+    "expires_at": 1702439140,
+    "expires_in": 21600,
+    "refresh_token": "54c5faf876626d9bb792d12a0990c0699c112c50",
+    "access_token": "ef9494e67d7c3089a88cacb423ecd18c83efca40",
+    "athlete": {
+        "id": 35553839,
+        "username": null,
+        "resource_state": 2,
+        "firstname": "Jonas",
+        "lastname": "Unglert",
+        "bio": "VC Mindelheim",
+        "city": "Cheekyville",
+        "state": "Bavaria",
+        "country": "Germany",
+        "sex": "M",
+        "premium": false,
+        "summit": false,
+        "created_at": "2018-10-08T22:34:55Z",
+        "updated_at": "2023-12-08T11:48:14Z",
+        "badge_type_id": 0,
+        "weight": 75.0,
+        "profile_medium": "https://dgalywyr863hv.cloudfront.net/pictures/athletes/35553839/11007590/13/medium.jpg",
+        "profile": "https://dgalywyr863hv.cloudfront.net/pictures/athletes/35553839/11007590/13/large.jpg",
+        "friend": null,
+        "follower": null
+    }
+}
