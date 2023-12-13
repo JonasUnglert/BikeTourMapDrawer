@@ -24,11 +24,14 @@ access_token = res.json()['access_token']
 print("Access Token = {}\n".format(access_token))
 
 # Enter the time frame
-start_date_str = "2023-04-01" #input("Geben Sie das Startdatum im Format JJJJ-MM-TT ein: ")
+start_date_str = "2023-04-05" #input("Geben Sie das Startdatum im Format JJJJ-MM-TT ein: ")
 end_date_str = "2023-12-06" #input("Geben Sie das Enddatum im Format JJJJ-MM-TT ein: ")
 max_activities = 200 #input("Maximale Aktivitäten: ")
 start_date = int(datetime.strptime(start_date_str, "%Y-%m-%d").timestamp())
 end_date = int(datetime.strptime(end_date_str, "%Y-%m-%d").timestamp())
+
+delta =datetime.strptime(end_date_str, "%Y-%m-%d") - datetime.strptime(start_date_str, "%Y-%m-%d")
+total_days = delta.days
 
 
 header = {'Authorization': 'Bearer ' + access_token}
@@ -45,12 +48,29 @@ coords_list = []
 
 
 m = folium.Map(location=[0, 0], zoom_start=2)
-
+total_distance_km = 0
+total_elevation_gain_m = 0
+days_cycling = 0
+days_short_distance = 0
+total_duration_cycling = 0
 # Extract and store the polylines, names, and dates from each activity
 for index, activity in enumerate(my_dataset):
     polyline_str = activity["map"]["summary_polyline"]
     name = activity["name"]
     date = activity["start_date_local"]
+    distance_km = activity['distance'] / 1000
+    elevation_gain = activity['total_elevation_gain']
+    duration_seconds = activity['moving_time']  # Dauer in Sekunden
+    duration_hours = duration_seconds / 3600  # Umrechnung in Stunden
+
+    total_duration_cycling += duration_hours
+    total_distance_km += distance_km
+    total_elevation_gain_m += elevation_gain
+
+    if distance_km <= 30:
+        days_short_distance += 1
+    else:
+        days_cycling += 1
 
     activity_data = {
         "name": name,
@@ -68,7 +88,31 @@ for index, activity in enumerate(my_dataset):
     decoded_coords = polyline.decode(polyline_str)
 
     if len(polyline_str) != 0:
-        folium.PolyLine(locations=decoded_coords, color='blue').add_to(m)
+        folium.PolyLine(locations=decoded_coords, color='red').add_to(m)
 
 file_path = "C:/Users/Public/Documents/map.html"
 m.save(file_path)
+
+days_resting = total_days - days_cycling
+
+print("Total days:")
+print(total_days)
+print("Rest days")
+print(days_resting)
+print("Cycling days")
+print(days_cycling)
+print("Total distance")
+print(total_distance_km)
+print("Total climbing")
+print(total_elevation_gain_m)
+print("Total hours in the saddle")
+print(total_duration_cycling)
+
+print("KM per day without rest days:")
+print(total_distance_km/days_cycling)
+
+print("KM per day with rest days:")
+print(total_distance_km/total_days)
+
+print("Hours per day in the saddle:")
+print(total_duration_cycling/days_cycling)
